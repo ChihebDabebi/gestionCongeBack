@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/demande")
 public class DemandeController {
@@ -43,6 +45,11 @@ public class DemandeController {
     ){
         demandeService.updateDemande(id,demandeDto);
         return new ResponseEntity<>(demandeDto,HttpStatus.CREATED);
+
+    }
+    @GetMapping("/all")
+    public ResponseEntity<List<DemandeDto>> getDemandes(){
+        return new ResponseEntity<>(demandeService.getAll(),HttpStatus.ACCEPTED);
 
     }
 }

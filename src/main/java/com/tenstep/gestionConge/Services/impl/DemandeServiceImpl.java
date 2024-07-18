@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class DemandeServiceImpl implements DemandeService {
@@ -45,7 +47,10 @@ public class DemandeServiceImpl implements DemandeService {
 
     @Override
     public List<DemandeDto> getAll() {
-        return null;
+        List<Demande> demandes = demandeRepository.findAll();
+        return demandes.stream()
+                .map(e->DemandeMapper.mapToDemandeDto(e))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -54,5 +59,6 @@ public class DemandeServiceImpl implements DemandeService {
         demande.setMotif(updatedDemande.getMotif());
         demande.setStatus(updatedDemande.getStatus());
         Demande updated = demandeRepository.save(demande);
-        return DemandeMapper.mapToDemandeDto(updated);    }
+        return DemandeMapper.mapToDemandeDto(updated);
+    }
 }
