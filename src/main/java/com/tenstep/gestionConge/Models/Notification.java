@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Document(collection = "notifications")
 @Data
 @NoArgsConstructor
@@ -15,4 +17,5 @@ public class Notification {
     private String notification_id;
     private String user_id;
     private String message ;
+    private Date date;
 }
