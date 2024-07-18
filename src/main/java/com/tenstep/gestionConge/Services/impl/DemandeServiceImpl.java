@@ -33,13 +33,14 @@ public class DemandeServiceImpl implements DemandeService {
 
     @Override
     public DemandeDto getDemandeById(String demande_id) {
-        Demande demande = demandeRepository.findById(demande_id).orElseThrow(() -> new RuntimeException("Departement is not exist with given id :  " + demande_id));
+        Demande demande = demandeRepository.findById(demande_id).orElseThrow(() -> new RuntimeException("demande is not exist with given id :  " + demande_id));
         return DemandeMapper.mapToDemandeDto(demande);
     }
 
     @Override
     public void deleteDemande(String demande_id) {
-
+        demandeRepository.findById(demande_id).orElseThrow(()-> new RuntimeException("aucune demande avec cette id "));
+        demandeRepository.deleteById(demande_id);
     }
 
     @Override

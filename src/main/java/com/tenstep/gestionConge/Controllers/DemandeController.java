@@ -13,18 +13,27 @@ public class DemandeController {
 
     private final DemandeService demandeService;
 
-    public DemandeController(DemandeService demandeService){
-        this.demandeService=demandeService;
+    public DemandeController(DemandeService demandeService) {
+        this.demandeService = demandeService;
     }
+
     @PostMapping
-    public ResponseEntity<DemandeDto> createDemande(@RequestBody DemandeDto demandeDto){
+    public ResponseEntity<DemandeDto> createDemande(@RequestBody DemandeDto demandeDto) {
 
         DemandeDto savedDemande = demandeService.addDemande(demandeDto);
         return new ResponseEntity<>(savedDemande, HttpStatus.CREATED);
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<DemandeDto> getDemandeById(@PathVariable String id ){
+    public ResponseEntity<DemandeDto> getDemandeById(@PathVariable String id) {
         DemandeDto demandeById = demandeService.getDemandeById(id);
-        return new ResponseEntity<>(demandeById,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(demandeById, HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteEmployeeById(@PathVariable String id) {
+        demandeService.deleteDemande(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 }
