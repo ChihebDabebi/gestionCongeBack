@@ -18,6 +18,6 @@ public class Demande {
     private Date date ;
     private String motif;
     private String status;
-    private User user;
+    private String user_id;
 
 }

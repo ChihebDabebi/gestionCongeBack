@@ -13,6 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Notification {
     @Id
     private String notification_id;
-    private User user;
+    private String user_id;
     private String message ;
 }

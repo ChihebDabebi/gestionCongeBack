@@ -17,6 +17,6 @@ public class Historique {
     private String historique_id;
     private Date date ;
     private String details;
-    private User user ;
+    private String user_id ;
 
 }

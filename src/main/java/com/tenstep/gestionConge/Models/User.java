@@ -18,5 +18,6 @@ public class User {
     private String email;
     private String cin;
     private Long age ;
-    private Role role ;
+    private String password;
+    private String role_id ;
 }
