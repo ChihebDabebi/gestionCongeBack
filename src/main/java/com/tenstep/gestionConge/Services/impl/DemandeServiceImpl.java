@@ -50,6 +50,9 @@ public class DemandeServiceImpl implements DemandeService {
 
     @Override
     public DemandeDto updateDemande(String demande_id, DemandeDto updatedDemande) {
-        return null;
-    }
+        Demande demande = demandeRepository.findById(demande_id).orElseThrow(() -> new RuntimeException("Departement not found with given id  "));
+        demande.setMotif(updatedDemande.getMotif());
+        demande.setStatus(updatedDemande.getStatus());
+        Demande updated = demandeRepository.save(demande);
+        return DemandeMapper.mapToDemandeDto(updated);    }
 }

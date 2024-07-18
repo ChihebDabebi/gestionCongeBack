@@ -36,4 +36,13 @@ public class DemandeController {
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<DemandeDto> updateDemande(
+            @PathVariable String id,
+            @RequestBody DemandeDto demandeDto
+    ){
+        demandeService.updateDemande(id,demandeDto);
+        return new ResponseEntity<>(demandeDto,HttpStatus.CREATED);
+
+    }
 }
