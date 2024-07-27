@@ -11,6 +11,8 @@ public class UserMapper {
                 user.getNom(),
                 user.getPrenom(),
                 user.getEmail(),
+                user.getDateEmbauche(),
+                user.getNbrJours(),
                 user.getCin(),
                 user.getAge()
         );
@@ -21,10 +23,14 @@ public class UserMapper {
                 userDto.getNom(),
                 userDto.getPrenom(),
                 userDto.getEmail(),
+                userDto.getDateEmbauche(),
+                userDto.getNbrJours(),
                 userDto.getCin(),
                 userDto.getAge(),
                 null,
                 null
+
+
         );
     }
 }

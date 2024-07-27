@@ -8,6 +8,9 @@ import com.tenstep.gestionConge.dto.UserDto;
 import com.tenstep.gestionConge.mappers.UserMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -24,8 +27,15 @@ public class UserServiceImpl implements UserService {
     public UserDto addUser(UserDto userDto) {
         User user = UserMapper.mapToUser(userDto);
         user.setUser_id(UUID.randomUUID().toString().split("-")[0]);
-        User savedUser = userRepository.save(user);
-        return UserMapper.mapToUserDto(savedUser);
+
+        long monthsBetween = ChronoUnit.MONTHS.between(user.getDateEmbauche(),LocalDate.now());
+        int nbrJours = (int)Math.round(monthsBetween*1.80);
+        user.setNbrJours(nbrJours);
+        if(!emailExists(userDto.getEmail())) {
+            User savedUser = userRepository.save(user);
+            return UserMapper.mapToUserDto(savedUser);
+        }
+        throw new RuntimeException("user deja exist");
     }
 
     @Override
@@ -59,4 +69,8 @@ public class UserServiceImpl implements UserService {
         User updated = userRepository.save(user);
         return UserMapper.mapToUserDto(updated);
     }
+    public boolean emailExists(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+
 }

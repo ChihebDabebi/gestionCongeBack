@@ -1,11 +1,11 @@
 package com.tenstep.gestionConge.Repositories;
 
+import com.tenstep.gestionConge.Models.Historique;
 import com.tenstep.gestionConge.Models.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import java.util.Optional;
+import java.util.List;
 
-public interface UserRepository extends MongoRepository<User,String> {
-    Optional<User> findByEmail(String email);
+public interface HistoriqueRepository extends MongoRepository<Historique,String> {
 
 }

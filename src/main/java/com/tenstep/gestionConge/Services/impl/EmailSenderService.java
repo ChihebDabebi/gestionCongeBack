@@ -1,9 +1,13 @@
 package com.tenstep.gestionConge.Services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailMessage;
+import org.springframework.mail.MailParseException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service
 public class EmailSenderService {
@@ -17,7 +21,6 @@ public class EmailSenderService {
         message.setTo(toEmail);
         message.setText(body);
         message.setSubject(subject);
-
         mailSender.send(message);
         System.out.println("Mail sent successfully ...");
     }

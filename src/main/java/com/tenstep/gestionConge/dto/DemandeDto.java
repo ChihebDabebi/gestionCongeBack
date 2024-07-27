@@ -1,10 +1,12 @@
 package com.tenstep.gestionConge.dto;
 
+import com.tenstep.gestionConge.Models.Response;
 import com.tenstep.gestionConge.Models.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -12,7 +14,10 @@ import java.util.Date;
 @AllArgsConstructor
 public class DemandeDto {
     private String demande_id;
-    private Date date ;
+    private LocalDate  date;
+    private LocalDate  dateDebut ;
+    private LocalDate dateFin ;
+    private Response response;
     private String motif;
     private String status;
 }

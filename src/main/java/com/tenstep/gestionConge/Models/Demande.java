@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Document(collection = "demandes")
@@ -15,9 +16,13 @@ import java.util.Date;
 public class Demande {
     @Id
     private String demande_id;
-    private Date date ;
+    private LocalDate  date;
+    private LocalDate  dateDebut ;
+    private LocalDate dateFin ;
     private String motif;
+    private Response response;
     private String status;
     private String user_id;
+
 
 }

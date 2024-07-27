@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Document(collection = "historiques")
@@ -15,7 +16,7 @@ import java.util.Date;
 public class Historique {
     @Id
     private String historique_id;
-    private Date date ;
+    private LocalDate date ;
     private String details;
     private String user_id ;
 

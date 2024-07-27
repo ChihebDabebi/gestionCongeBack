@@ -18,14 +18,7 @@ public class NotificationServiceImpl implements NotificationService {
     public NotificationServiceImpl(NotificationRepository notificationRepository){
         this.notificationRepository=notificationRepository;
     }
-    @Override
-    public NotificationDto createNotification(NotificationDto notificationDto) {
-        Notification notification = NotificationMapper.mapToNotification(notificationDto);
-        notification.setNotification_id(UUID.randomUUID().toString().split("-")[0]);
-        notification.setDate(new Date());
-        Notification savedNotif = notificationRepository.save(notification);
-        return NotificationMapper.mapToNotificationDto(savedNotif);
-    }
+
 
     @Override
     public void deleteNotification(String notification_id) {

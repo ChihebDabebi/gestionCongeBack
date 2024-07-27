@@ -2,7 +2,9 @@ package com.tenstep.gestionConge.Controllers;
 
 import com.tenstep.gestionConge.Models.Demande;
 import com.tenstep.gestionConge.Services.DemandeService;
+import com.tenstep.gestionConge.Services.impl.EmailSenderService;
 import com.tenstep.gestionConge.dto.DemandeDto;
+import com.tenstep.gestionConge.utils.NotificationMail;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,14 +14,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/demande")
 public class DemandeController {
-
+    private final EmailSenderService senderService;
     private final DemandeService demandeService;
 
-    public DemandeController(DemandeService demandeService) {
+    public DemandeController(DemandeService demandeService,EmailSenderService senderService) {
         this.demandeService = demandeService;
+        this.senderService=senderService;
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<DemandeDto> createDemande(@RequestBody DemandeDto demandeDto) {
 
         DemandeDto savedDemande = demandeService.addDemande(demandeDto);
@@ -52,4 +55,13 @@ public class DemandeController {
         return new ResponseEntity<>(demandeService.getAll(),HttpStatus.ACCEPTED);
 
     }
+    @PutMapping("/{id}/accept")
+    public DemandeDto acceptDemande(@PathVariable String id) {
+        return demandeService.accepterDemande(id);
+    }
+    @PutMapping("/{id}/refuse")
+    public DemandeDto refuserDemande(@PathVariable String id) {
+        return demandeService.accepterDemande(id);
+    }
+
 }

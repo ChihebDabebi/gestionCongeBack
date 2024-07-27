@@ -12,4 +12,7 @@ public interface DemandeService {
     void deleteDemande(String demande_id);
     List<DemandeDto> getAll();
     DemandeDto updateDemande(String demande_id , DemandeDto updatedDemande);
+    DemandeDto accepterDemande(String id);
+    DemandeDto RefuserDemande(String id);
+
 }
