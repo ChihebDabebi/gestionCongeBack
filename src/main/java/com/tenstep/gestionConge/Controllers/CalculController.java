@@ -33,7 +33,7 @@ public class CalculController {
         return numberOfDemandes ;
     }
     @GetMapping("/perMonth")
-    public Map<String,Integer> demandesNumberPerMonth () {ttt
+    public Map<String,Integer> demandesNumberPerMonth () {
         Map<String,Integer> numberOfDemandes = calculService.getDemandsPerMonth();
         return numberOfDemandes ;
     }
