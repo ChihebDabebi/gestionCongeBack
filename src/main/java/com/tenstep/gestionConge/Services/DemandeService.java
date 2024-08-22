@@ -14,5 +14,6 @@ public interface DemandeService {
     DemandeDto updateDemande(String demande_id , DemandeDto updatedDemande);
     DemandeDto accepterDemande(String id);
     DemandeDto RefuserDemande(String id);
+    List<Demande> getMyDemands(String id );
 
 }

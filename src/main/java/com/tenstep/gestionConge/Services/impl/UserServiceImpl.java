@@ -6,12 +6,15 @@ import com.tenstep.gestionConge.Repositories.UserRepository;
 import com.tenstep.gestionConge.Services.UserService;
 import com.tenstep.gestionConge.dto.UserDto;
 import com.tenstep.gestionConge.mappers.UserMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -23,7 +26,7 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserRepository userRepository){
         this.userRepository=userRepository;
     }
-    @Override
+
     public UserDto addUser(UserDto userDto) {
         User user = UserMapper.mapToUser(userDto);
         user.setUser_id(UUID.randomUUID().toString().split("-")[0]);
@@ -42,6 +45,9 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserById(String user_id) {
         User user = userRepository.findById(user_id).orElseThrow(()->new RuntimeException("user avec cet id nexiste pas"));
         return UserMapper.mapToUserDto(user);
+    }
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     @Override
@@ -71,6 +77,12 @@ public class UserServiceImpl implements UserService {
     }
     public boolean emailExists(String email) {
         return userRepository.findByEmail(email).isPresent();
+    }
+
+    @Override
+    public  User getConnectedUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (User) authentication.getPrincipal();
     }
 
 }

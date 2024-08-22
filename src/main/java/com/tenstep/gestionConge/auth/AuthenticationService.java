@@ -5,6 +5,7 @@ import com.tenstep.gestionConge.Models.Role;
 import com.tenstep.gestionConge.Models.User;
 import com.tenstep.gestionConge.Repositories.UserRepository;
 import com.tenstep.gestionConge.config.JwtService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Service
@@ -40,12 +43,13 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.Employe)
                 .dateEmbauche(request.getDateEmbauche())
+                .nbrJours((int)Math.round(ChronoUnit.MONTHS.between(request.getDateEmbauche(), LocalDate.now())*1.80))
                 .cin(request.getCin())
                 .age(request.getAge())
                 .build();
         var savedUser =repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
+        var jwtToken = jwtService.generateToken(savedUser);
+        var refreshToken = jwtService.generateRefreshToken(savedUser);
 
 
         return AuthenticationResponse.builder()
@@ -71,30 +75,58 @@ public class AuthenticationService {
     }
 
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String refreshToken ;
-        final String email ;
-        if(authHeader == null || !authHeader.startsWith("Bearer ")){
+        // Extract refresh token from cookies
+        Cookie[] cookies = request.getCookies();
+        System.out.println(cookies);
+        String refreshToken = null;
+        for (Cookie cookie : cookies) {
+            if ("refreshToken".equals(cookie.getName())) {
+                refreshToken = cookie.getValue();
+                System.out.println("refresh" + refreshToken);
+                break;
+            }
+        }
+
+        if (refreshToken == null) {
+            // Handle case where refresh token is not found
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Refresh token not found");
             return;
         }
-        refreshToken = authHeader.substring(7);
-        email = jwtService.extractEmail(refreshToken);
+
+        // Extract email from the refresh token
+        String email = jwtService.extractEmail(refreshToken);
         Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
-        logger.trace(""+email);
-        if(email != null){
-            User user =  this.repository.findByEmail(email).orElseThrow();
-            logger.trace("token validation :"+jwtService.isTokenValid(refreshToken,user));
-            if(jwtService.isTokenValid(refreshToken,user)){
+        logger.trace("Extracted email: " + email);
+
+        if (email != null) {
+            User user = this.repository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+            logger.trace("Token validation: " + jwtService.isTokenValid(refreshToken, user));
+            if (jwtService.isTokenValid(refreshToken, user)) {
+                // Generate new access token
                 var accessToken = jwtService.generateToken(user);
+
+                // Create new authentication response
                 var authenticationResponse = AuthenticationResponse.builder()
                         .accessToken(accessToken)
-                        .refreshToken(refreshToken)
+                        .refreshToken(refreshToken) // Include refresh token in response if needed
                         .build();
-                logger.debug("vvccc"+authenticationResponse);
-                objectMapper.writeValue(response.getOutputStream(),authenticationResponse);
 
+                // Optionally, set the refresh token in a new cookie
+                Cookie newCookie = new Cookie("refreshToken", refreshToken);
+                newCookie.setHttpOnly(true);
+                newCookie.setSecure(true);
+                newCookie.setPath("/"); // Set the path to ensure it is accessible
+                newCookie.setMaxAge(60 * 60 * 24); // Set cookie expiration time
+                response.addCookie(newCookie);
 
+                // Send the response
+                response.setContentType("application/json");
+                objectMapper.writeValue(response.getOutputStream(), authenticationResponse);
+            } else {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid refresh token");
             }
+        } else {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid refresh token");
         }
     }
 }

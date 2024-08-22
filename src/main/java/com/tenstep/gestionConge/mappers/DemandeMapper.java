@@ -16,7 +16,8 @@ public class DemandeMapper {
                 demande.getDateFin(),
                 demande.getResponse(),
                 demande.getMotif(),
-                demande.getStatus()
+                demande.getStatus(),
+                null
 
         );
     }

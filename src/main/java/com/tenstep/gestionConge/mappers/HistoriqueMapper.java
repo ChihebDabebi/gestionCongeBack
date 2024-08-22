@@ -13,7 +13,7 @@ public class HistoriqueMapper {
                 historique.getHistorique_id(),
                 null,
                 historique.getDetails(),
-                historique.getUser_id()
+                null
 
         );
         
@@ -22,8 +22,7 @@ public class HistoriqueMapper {
         return new Historique(
                 historiqueDto.getHistorique_id(),
                 historiqueDto.getDate(),
-                historiqueDto.getDetails(),
-                historiqueDto.getUsername()
+                historiqueDto.getDetails(), historiqueDto.getUser_id()
         );
     }
 }

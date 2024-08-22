@@ -1,6 +1,7 @@
 package com.tenstep.gestionConge.Services;
 
 
+import com.tenstep.gestionConge.Models.Demande;
 import com.tenstep.gestionConge.Models.Historique;
 import com.tenstep.gestionConge.dto.HistoriqueDto;
 
@@ -11,5 +12,6 @@ public interface HistoriqueService {
     HistoriqueDto getHistoriqueById(String historique_id);
 
     void deleteHistorique(String historique_id);
+    List <Historique> getMyHistory(String id);
 
 }
